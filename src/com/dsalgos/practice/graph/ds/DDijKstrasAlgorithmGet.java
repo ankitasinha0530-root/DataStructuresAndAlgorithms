@@ -1,15 +1,14 @@
 package com.dsalgos.practice.graph.ds;
 
-import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.*;
 
-public class DDijKstrasAlgorithm {
+public class DDijKstrasAlgorithmGet {
 
 	// Find path with minimum weight of the edges
 	// Generate shortest path tree
 	// we will use priorityQueue here
 	// In Priority Queue elements are sorted in ascending order by default, 
-	// hence the head of the queue is the element whose priority is lowest.
+	// hence the head of the queue is the element whose priority is lowest. - minHEap
 	public static class Edge{
 		
 		 int src;
@@ -21,23 +20,6 @@ public class DDijKstrasAlgorithm {
 			 this.neibr = neibr;
 			 this.wt = wt;
 		 }
-	}
-	
-	public static class Pair implements Comparable<Pair>{
-		int v;
-		String psf;
-		int wsf;
-		
-		public Pair(int v, String psf, int wsf) {
-			this.v = v;
-			this.psf = psf;
-			this.wsf = wsf;
-		}
-
-		@Override
-		public int compareTo(Pair o) {
-			return this.wsf - o.wsf;
-		}
 	}
 	
 	public static class Graph{
@@ -95,25 +77,84 @@ public class DDijKstrasAlgorithm {
 		//Define PriorityQueue
 		PriorityQueue<Pair> minpq = new PriorityQueue<>((w1, w2) -> w1.wsf - w2.wsf);
 		minpq.offer(new Pair(src, src+"", 0));
+
 		boolean[] visited = new boolean[v];
-		printAllShortestPath(minpq, visited, g);
+		Map<Integer, Result> answer = new HashMap<>();
+		printAllShortestPath(minpq, visited, g, answer);
+
+		for (Map.Entry<Integer, Result> entry : answer.entrySet()) {
+			System.out.println(
+					entry.getKey() + " -> " + entry.getValue()
+			);
+		}
+
 	}
 
-	private static void printAllShortestPath(PriorityQueue<Pair> minpq, boolean[] visited, Graph graph) {
-		
-		while(!minpq.isEmpty()) {
-			Pair pair = minpq.poll();
-			
-			if(visited[pair.v] == true) {
-				continue; 				// if the vertex is visited skip the iteration
+	private static void printAllShortestPath(PriorityQueue<Pair> minpq, boolean[] visited, Graph graph, Map<Integer, Result> answer) {
+
+		int n = graph.adjacency.length;
+
+		int[] dist = new int[n];
+		String[] paths = new String[n];
+
+		Arrays.fill(dist, Integer.MAX_VALUE);
+
+		while (!minpq.isEmpty()) {
+
+			Pair curr = minpq.poll();
+
+			if (visited[curr.v]) {
+				continue;
 			}
-			visited[pair.v] = true;
-	//		System.out.println(pair.v + ", " + pair.psf + ", " + pair.wsf);
-			for(Edge e : graph.adjacency[pair.v]) {
-				if(visited[e.neibr] == false) {
-					minpq.add(new Pair(e.neibr, pair.psf + e.neibr, pair.wsf + e.wt));
+
+			visited[curr.v] = true;
+
+			// Store Answer
+			List<Integer> path = new ArrayList<>();
+			for (String s : curr.psf.split("->")) {
+				path.add(Integer.parseInt(s));
+			}
+			answer.put(curr.v, new Result(curr.wsf, path));
+
+			for (Edge e : graph.adjacency[curr.v]) {
+				if (!visited[e.neibr]) {
+					minpq.add(new Pair(e.neibr,curr.psf + "->" + e.neibr,curr.wsf + e.wt));
 				}
 			}
+		}
+		System.out.println(Arrays.toString(dist));
+		System.out.println(Arrays.toString(paths));
+	}
+
+	private static class Pair implements Comparable<Pair>{
+		int v;
+		String psf;
+		int wsf;
+
+		public Pair(int v, String psf, int wsf) {
+			this.v = v;
+			this.psf = psf;
+			this.wsf = wsf;
+		}
+
+		@Override
+		public int compareTo(Pair o) {
+			return this.wsf - o.wsf;
+		}
+	}
+
+	static class Result {
+		int distance;
+		List<Integer> path;
+
+		Result(int distance, List<Integer> path) {
+			this.distance = distance;
+			this.path = path;
+		}
+
+		@Override
+		public String toString() {
+			return "distance=" + distance + ", path=" + path;
 		}
 	}
 }

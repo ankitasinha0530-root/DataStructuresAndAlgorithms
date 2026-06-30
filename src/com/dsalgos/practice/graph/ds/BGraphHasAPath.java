@@ -44,9 +44,9 @@ public class BGraphHasAPath {
 		
 		visited[src] = true;
 		for(Edge edge : graph[src]) {
-			if(visited[edge.nbr] == false) {
+			if(!visited[edge.nbr]) {
 				boolean hasNbrPath = hasPath(graph, edge.nbr, dest, visited);
-				if(hasNbrPath == true) {
+				if(hasNbrPath) {
 					return true;
 				}
 			}

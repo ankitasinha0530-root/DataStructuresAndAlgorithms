@@ -18,6 +18,7 @@ public class FFindPathWeightFloorValOfk {
 			graph[i] = new ArrayList<>();
 		}
 		graph[0].add(new Edge(0, 1, 10));
+		graph[0].add(new Edge(0, 5, 41));
 		graph[1].add(new Edge(1, 0, 10));
 		graph[2].add(new Edge(2, 3, 20));
 		graph[3].add(new Edge(3, 2, 20));
@@ -40,6 +41,8 @@ public class FFindPathWeightFloorValOfk {
 			int val) {
 
 		if(src == dest) {
+
+			System.out.println("psf = " + psf + ", weight = " + wsf);
 			if(wsf < val) {
 				fPathwt = Math.max(fPathwt, wsf);
 				fPath = psf;

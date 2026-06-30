@@ -42,6 +42,7 @@ public class CPrintAllPaths {
 		}
 		
 		visited[src] = true;
+		System.out.println();
 		for(Edges edge : graph[src]) {
 			if(visited[edge.nbr] == false) {
 				printAllPaths(graph, edge.nbr, dest, visited, psf);

@@ -20,6 +20,7 @@ public class GFindnthLargestPathWeight {
 			graph[i] = new ArrayList<>();
 		}
 		graph[0].add(new Edge(0, 1, 10));
+		graph[0].add(new Edge(0, 5, 80));
 		graph[1].add(new Edge(1, 0, 10));
 		graph[2].add(new Edge(2, 3, 20));
 		graph[3].add(new Edge(3, 2, 20));
@@ -52,12 +53,13 @@ public class GFindnthLargestPathWeight {
 			int k) {
 			
 		if(src == dest) {
+			System.out.println("psf = " + psf + ", weight = " + wsf);
 	//		minHeap1.add(wsf);
 			if(minHeap.size() < k) {
 				minHeap.add(wsf);
 				
 			}else {
-				if(minHeap.size() > 0 && minHeap.peek() < wsf) {
+				if(!minHeap.isEmpty() && minHeap.peek() < wsf) {
 					minHeap.poll();
 					minHeap.add(wsf);
 				}

@@ -34,7 +34,9 @@ public class BGetAllPathOfGraphPepcoding {
 			return;
 		}
 		visited[source] = true;
+
 		List<Edge> childNode = graph[source];
+
 		for(Edge edge : childNode) {
 			if(!visited[edge.nbr]) {
 				printAllValidPath(graph, edge.nbr, dest, visited, ans + edge.nbr);
